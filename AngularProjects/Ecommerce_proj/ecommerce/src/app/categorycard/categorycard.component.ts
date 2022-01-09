@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CategoriesService } from '../services/categories.service';
 
 @Component({
@@ -8,80 +9,42 @@ import { CategoriesService } from '../services/categories.service';
 })
 export class CategorycardComponent implements OnInit {
 
-  // categories1=[
-
-  //   {
-  //     idCategory: 1,
-  //     nameCategory: "Smartphone",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/smartphone.jpg",
-  //   },
-  //   {
-  //     idCategory: 2,
-  //     nameCategory: "Laptop",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/laptop.jpg",
-
-  //   },
-  //   {
-  //     idCategory: 3,
-  //     nameCategory: "High-Tech accessories",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/accessories.jpg",
-
-  //   },
-  //   {
-  //     idCategory: 4,
-  //     nameCategory: "For women",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/perfumes_forher.jpg",
-  //   },
-  //   {
-  //     idCategory: 5,
-  //     nameCategory: "For men",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/perfumes_forhim.jpg",
-
-  //   },
-  //   {
-  //     idCategory: 6,
-  //     nameCategory: "Bath Room",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/bath_room.jpg",
-
-  //   },
-  //   {
-  //     idCategory: 7,
-  //     nameCategory: "Dinner Room",
-  //     descriptionCategory: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  //     imageCategory: "assets/images/dinner_room.jpg",
-
-  //   },
-
-  // ];
-
-  // categories1 : any = [];
-
-  // constructor(private service:CategoriesService) { 
-  //   this.service.getCategories().subscribe((data)=> {
-  //     this.categories1=data;
-  //     console.log(data);
-  //   })
-  // }
-
   public categories: any;
 
-  constructor(public servicesCategories: CategoriesService) {}
-
-  ngOnInit(): void {
-    this.getCategories();
+  constructor(public servicesCategories: CategoriesService,
+    private route: ActivatedRoute,
+    private router: Router) {
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        let url = val.url;
+        console.log(url);
+        let param = this.route.snapshot.params['id'];
+        if (param == "all") {
+          this.getAllCategories();
+        }
+        else if (!(param == "all")) {
+          this.getCategoriesByParent();
+        }
+      }
+    })
   }
 
-  public getCategories() {
+  ngOnInit(): void {
+
+  }
+
+  public getAllCategories() {
     this.servicesCategories.getRessources("/category/getAll")
-    .forEach(data => {
-      this.categories=data;
-    });
+      .forEach(data => {
+        this.categories = data;
+      });
+  }
+
+  public getCategoriesByParent() {
+    this.servicesCategories.getRessources("/category/getByParent/" + this.route.snapshot.params['id'])
+      .forEach(data => {
+        this.categories = data;
+      })
   }
 
 }

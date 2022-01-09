@@ -4,7 +4,7 @@
       <div class="dropdown" >
         <div class="default_option" (click)="addJsCode() ">All</div>
         <ul >
-        <li *ngFor =" let c of categories" (click)="addJsCode1(c) ">{{c}}</li>
+        <li *ngFor =" let c of categories; let indexOfelement=index;" (click)="addJsCode1(c,indexOfelement) ">{{c}}</li>
        
       </ul>
       </div>

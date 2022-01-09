@@ -7,7 +7,12 @@ import { ShopbagComponent } from './shopbag/shopbag.component';
 import { RouterModule, Routes } from '@angular/router';
 import { DropdownsearchComponent } from './dropdownsearch/dropdownsearch.component';
 import { HttpClientModule } from '@angular/common/http';
-
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes=[
 
@@ -15,8 +20,15 @@ const routes: Routes=[
     path: 'shopbag', component: ShopbagComponent,
   },
   {
-    path: '', component: CategorycardComponent,
+    path: 'categories/:id', component: CategorycardComponent,
   },
+  // {
+  //   path: '', redirectTo:'categories/1', pathMatch: 'full',
+  // },
+  // {path: "", redirectTo:"/login", pathMatch: 'full'},
+  // {path:"login" , component: LoginComponent},
+  // {path:"register", component:RegisterComponent},
+  // {path:"**", component:PageNotFoundComponent}
 ];
 
 @NgModule({
@@ -25,12 +37,18 @@ const routes: Routes=[
     WelcomepageComponent,
     CategorycardComponent,
     ShopbagComponent,
-    DropdownsearchComponent
+    DropdownsearchComponent,
+    LoginComponent,
+    RegisterComponent,
+    NavbarComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
